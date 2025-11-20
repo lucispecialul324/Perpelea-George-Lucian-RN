@@ -1,0 +1,35 @@
+Preprocesarea datelor
+
+Preprocesare este simplificata, deoarece setul de date este sintetic. Obiectivul principal este de a asigura formatul
+corect de intrare ( vecot 1D normalizat ) si de a preveni suprea-antrenarea.
+
+1. Curatarea datelor
+	Eliminarea dublicate:
+		Concluzie: Neaplicabil, deoarece fiecare intrare corespunde unui pattern unic predefinit.
+	Tratarea valorilor lipsa:
+		Concluzie: 0% valori lipsa. Datele sunt generate complet si perfect binarizat pentru fiecare pixel din matrice. Nu este necesarea imputarea.
+	Tratarea outlierilor:
+		Concluzie: Neaplicabil pentru setul de antrenare perfect. Un outlier ar putea fi definit ca patter care necesita un numar neobisnuit de pixeli
+			   aprinsi/stinsi, dar in setul sintetic toate pattern-urile sunt valide.
+
+2. Transformarea caracteristicilor
+	Normalizare:
+		Principiu aplicat: Normalizarea Min-Max ( desi valorile sunt deja normaizate ).
+		Justificare: Deoarece vectorul de intrare este binar, ele este implicit scalat. Aceasta etapa este mentionata pentru a confirma ca datele sunt in plaja [0,1], ceea ce este o cerinta de baza pentru functia
+			     de activare a neuronilor.
+	Encoding pentru variabile categoriale:
+		Principiu aplicat: One-hot encoding implicit.
+		Justificare: Desi imputul este deja numeric binar, clasa tinta din fisierul Date.bin este codificat numeric. Toolkit-ul NI SSNN trateaza aceasta iesire numerica ca un vector de clase, unde doar clasa corecta are valoarea maxima.
+
+3. Structura seturilor de date
+	Impartire recomandata (Strategie utilizata):
+		Train: 80%
+		Validation: 10%
+		Test: 10%
+	Principii respectate:
+		Stratificare pentru clasificare: Se asigura ca proporția fiecărui simbol/grup este menținută în mod egal în seturile Train, Validation și Test (ex: dacă antrenăm 10 simboluri, fiecare simbol trebuie să fie reprezentat proporțional în toate cele trei seturi).
+		Fără scurgere de informație (data leakage): Se aplică doar antrenarea pe setul Train.
+		Statistici calculate DOAR pe Train: Deși datele sunt deja normalizate, orice statistici viitoare (ex: medii pentru adăugarea de zgomot) se vor calcula strict pe setul de antrenare. 
+
+4. Salvarea rezultatelor preprocesarii
+	Date preprocesate in: Date.bin 
