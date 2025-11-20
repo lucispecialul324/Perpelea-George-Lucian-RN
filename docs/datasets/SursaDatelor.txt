@@ -1,0 +1,36 @@
+Descrierea setelui de date
+
+1. Sursa Datelor:
+
+Origine: Set de date generat intern ( simulat ) prin functii LabView pentru corespondenta caracter (String) - pattern boolean.
+	De asemenea, poate fi considerat un subset adaptat al unui dataset public de recunoastere de caractere.
+
+Modul de achizitie: Generare programatica ( prin GenerareDate.vi, care converteste strin-ul in matrice booleana) 
+		   + fisier extern ( Date.bin, folosit pentru stocarea vecotrilor de antrenare).
+
+Perioada / conditii experimentale: Antrenament efectat cu un set fix de simboluri/grupuri ( ex: '0' la '9', 'A' la 'Z' si '12','CU') pre-definite si binarizare pe o grila de dimensiune fixa ( ex: 7x9 ).
+
+2. Caracteristicile dataset-ului
+
+Numar total de observatii: 31 litere, 10 cifre + grupuri de simboluri.
+
+Numar de caracteristici: 63 ( vom folosi matrici booleene de 7x9 pixeli).
+
+Tipuri de date: Numerice ( Vectorii 1D de intrare sunt reprezentati ca array de booleeni convertiti la 0/1)
+		/ Imagini ( Matricea 2D este o imagine binara de foarte joasa rezolutie).
+
+Format fisier: Binar ( .bin ) pentru datele de antrenare (  stocat sub forma de vector de intrare + clasa tinta ) si vi ( Labview virtual instrument ) pentru logica de generare.
+
+
+Descrierea fiecarei caracteristici:
+
+Dataset-ul de antrenare este compus diin doua seturi majore de date:
+
+Caracteristica 		Tip		Unitate 	Descriere						Domeniu Valori
+
+Input Feature Vecor	Numeric/Binar	Pixel	    Vector 1D rezultat din liniarizarea matricei 2d.		{0,1}(0-stins/alb,1-aprins/negru)
+						    Fiecare element reprezinta starea unui pixel.
+
+
+Output Target Class	Numeric		Indice	    Indicele clasei tinta. Reprezinta simbolul corect           {0,1,2,..,N-1}(N=nr total de simboluri antrenate).
+						    asociat vecotorului de intrare.
