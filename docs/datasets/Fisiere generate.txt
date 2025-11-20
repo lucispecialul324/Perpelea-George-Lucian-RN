@@ -1,0 +1,14 @@
+Fisiere Generate în Această Etapă
+
+Această secțiune documentează rezultatele tangibile, fișierele și codul LabVIEW generate în etapele de Achiziție, EDA și Preprocesare a Datelor.
+
+	data/raw/ Date brute: Neaplicabil, deoarece intrarea String este procesată direct.
+
+	data/processed/ Date curățate & transformate: Date.bin (Fișierul binar LabVIEW care conține Vectorii 1D de intrare și Vectorii de Ieșire One-Hot Encoded, gata de antrenare).
+
+	data/train/, data/validation/, data/test/ Seturi finale: Recomandat să se folosească fișiere .bin separate pentru fiecare set (Train, Validation, Test), extrase din Date.bin (ex: Train.bin, Validation.bin, Test.bin).
+
+	src/preprocessing/ Codul de preprocesare: GenerareDate.vi (VI-ul LabVIEW responsabil cu conversia String -> Matrice Booleană -> Vector 1D, și salvarea în Date.bin).
+
+	data/README.md Descrierea dataset-ului: Documentele descriptive (e.g., specificatii_dataset.md, specificatii_eda.md, specificatii_preprocesare.md) care descriu complet structura datelor.
+
