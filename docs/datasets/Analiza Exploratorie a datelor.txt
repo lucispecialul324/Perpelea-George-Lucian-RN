@@ -1,0 +1,45 @@
+Analiza Exploratorie a Datelor (EDA) - Sintetic
+
+Avand in vedere ca dataset-ul este generat programatic si consta in valori binare ( 0 sau 1 ), 
+analiza EDA este concentrata pe distriburia claselor si vizualizarea pattern-urilor, mai degraba decat pe curatarea datelor.
+
+1. Statistici descriptive aplicate
+
+Medie, mediana, deviate standard:
+	Context: Se aplica vectorului de intrare 1D.
+	Medie(Lumina): Reprezinta densitatea medie de pixeli aprinsi ('1') pe intreaga imagine ( matrice).
+		       Aceasta este o statistica utila pentru a verifica complexitatea medie a simbolurilor.
+	Deviatia standard: Masoara variabilitatea distrivutiei pixelilor ( cat de raspanditi sunt pixelii aprinsi).
+
+Min-max si quartile:
+	Context: Domeniu de valori este fix {0,1}
+	Min/Max: 0(Pixel stins) si 1(Pixel aprins).
+
+Distributia pe caracteristici (histograme):
+	Se realizeaza o histograma a frecventei valorilor 0 si 1 pe intregul dataset. Avand in vedere ca datele sunt binare, histograma va avea doar doua bare.
+
+Identificarea outlierilor (IQR/percentile):
+	Context: Outlierii sunt definiti ca pattern-uri care difera semnificativ de medie ( de exemplu, un simbol care 
+		are mult mai multi sau mult mai putini pixeli aprinsi decat media setului).
+
+
+2. Analiza calitatii datelor
+
+Detectarea valorilor lipsa ( % pe coloana ):
+	Concluzie: 0%. Deoarece datale sunt generate programatic prin GenerareDate.vi, nu exista valori lipsa.
+		   Toate cele 63 de caracteristici ( pixeli ) au valoarea definita ( 0 sau 1 ).
+
+Detectarea valorilor incostiente sau eronate:
+	Concluzie: 0%. Dataset-ul este binar si nu contine erori, deoarece conversia string-to-boolean asigura coerenta logica ( orice valoare non-binara este imposibila).
+
+Identificarea caracteristicilor redundante sau puternic corelate:
+	Context: Verificarea corelatiei dintre pixeli adiacenti.
+	Concluzie: Corelatia este foarte puternica. De exemplu, Pixelul (1,1) este puternic corelat cu Pixelul (1,2) atunci cand se formeaza linii, ceea ce indica faptul ca simbolul este 
+		   coerent si usor de invatat de retea.
+
+3. Probleme identificate
+
+Variabilitatea redusa in setul de antrenare: Deoarece simbolurile sunt generate pe o grila fixa si nu prezinta zgomot real, reteaua poate fi
+supra-antrenata pe setul perfect de antrenare.
+	Solutia propusa: Introducerea unei componente de zgomot sau decalaj in GenerareDate.vi pentru a simula variatiile din lumea reala ( masurata de o camera industriala ).
+
