@@ -1,1 +1,27 @@
+## 4. Analiza si Concluzii (Results)
 
+### 4.1 Performanta Sistemului
+Sistemul a fost testat manual prin introducerea a peste 50 de variante de desene pentru cifre si litere. Rezultatul este un sistem stabil, capabil sa proceseze matricea de 9x28 instantaneu. Performanta a fost monitorizata prin graficul de "Error Evaluation" din LabVIEW, care a coborat sub pragul de 0.1 in faza finala de antrenare.
+
+### 4.2 Acuratete si Limitari
+In urma testelor, s-a stabilit o acuratete medie de aproximativ 84%. 
+* **Puncte tari:** Recunoastere excelenta pentru caracterele cu linii drepte (L, T, 1, 7).
+* **Limitari:** Rezolutia de 9x7 pixeli per caracter creeaza dificultati la simbolurile foarte rotunjite (ex: 'B' poate fi confundat cu '8').
+
+### 4.3 Optimizarea Parametrilor
+Cea mai buna configuratie a fost gasita la **30 de neuroni in stratul ascuns**. Aceasta valoare asigura o memorare corecta a formelor fara a produce fenomenul de "overfitting" (reaua sa memoreze doar pozele de antrenare, fara a putea ghici desene noi).
+
+### 4.4 Lectii Invatate
+Proiectul a demonstrat ca in LabVIEW, preprocesarea (modul in care array-ul boolean este transformat in vector) este la fel de importanta ca reteaua neuronala in sine. De asemenea, calitatea datelor din fisierul `trained_model.bin` depinde direct de diversitatea desenelor salvate initial.
+
+## 5. Instructiuni de Rulare (Quick Start)
+
+Pentru a porni si utiliza aplicatia, urmati acesti pasi:
+
+1. **Incarcarea proiectului:** Deschideti folderul radacina si porniti VI-ul principal din: `src/VI_Final/Antrenare neuroni ghicire cifre_litere_simboluri_grupuri de simboluri.vi`.
+2. **Predictia:** - Desenati caracterele dorite pe matricea de 9x28.
+   - Selectati tipul de caracter dorit din vectorul de selectie.
+   - Sistemul va afisa automat rezultatul ghicit de retea.
+3. **Antrenarea (Optional):** Daca doriti sa imbunatatiti rezultatele, folositi VI-urile din `src/Antrenare/` pentru a rula procesul de "Teach" pe fisierele `.bin` din folderul `data/`.
+
+**Status Final:** Proiect functional si optimizat pentru prezentare.
