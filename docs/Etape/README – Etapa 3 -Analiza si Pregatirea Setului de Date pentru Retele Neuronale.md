@@ -3,6 +3,7 @@
 **Disciplina:** Retele Neuronale  
 **Institutie:** POLITEHNICA Bucuresti – FIIR  
 **Student:** Perpelea George-Lucian  
+**Link Git-hub** https://github.com/lucispecialul324/Perpelea-George-Lucian-RN
 
 ## Introducere
 
