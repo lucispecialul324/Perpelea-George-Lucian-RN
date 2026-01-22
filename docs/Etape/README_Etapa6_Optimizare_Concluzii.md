@@ -78,29 +78,33 @@ Sistemul SIA implementat in LabVIEW reuseste sa prezica setul de 4 caractere cu 
 ## 5. Structura Finala Repository
 
 Perpelea-George-Lucian-RN/
-├── data/                         # Fisiere de date .bin
+├── README.md                         # Fisierul principal de prezentare
+├── config/                           # Parametrii retelei (iterații, LR, praguri)
+├── data/                             # Seturile de date originale (.bin)
 │   ├── DateCifre.bin             
 │   ├── DateLitere.bin            
-│   ├── DateSimboluri.bin         
-│   └── trained_model.bin       
-│
-├── src/                          # VI-urile proiectului
-│   ├── GenerareDate/             
-│   │   ├── GenerareDateCifre.vi
-│   │   ├── GenerareDateLitere.vi
-│   │   └── GenerareDateSimboluri.vi
-│   ├── Antrenare/                
-│   │   ├── Antrenare neuroni ghicire numere.vi
-│   │   ├── Antrenare neuroni ghicire litere.vi
-│   │   ├── Antrenare neuroni ghicire simboluri.vi
-│   │   └── SubVIs/ (Neural Network.lvclass, Teach.vi, etc.)
-│   └── VI_Final/                 
-│       └── Antrenare neuroni ghicire cifre_litere_simboluri_grupuri de simboluri.vi
-│
-├── docs/                         # Documentatie si imagini
-│   ├── state_machine.png      
-│   └── screenshots/              
-│
-├── etapa4_arhitectura_sia.md     
-├── etapa5_antrenare_model.md     
-├── etapa6_optimizare_concluzii.md 
+│   └── DateSimboluri.bin         
+├── docs/                             # Documentatia proiectului pe etape
+│   ├── etapa3_analiza_date.md
+│   ├── etapa4_arhitectura_sia.md
+│   ├── etapa5_antrenare_model.md
+│   ├── etapa6_optimizare_concluzii.md
+│   ├── state_machine.png             
+│   ├── demo/                         # Video demonstrativ (End-to-End)
+│   └── screenshots/                  # Capturi Front Panel si Block Diagram
+├── models/                           # Modelele antrenate
+│   └── trained_model.bin             # Fisierul de greutati salvat (Final)
+├── results/                          # Grafice de eroare si statistici finale
+└── src/
+    └── app/                          # Codul sursa functional LabVIEW
+        ├── GenerareDate/             # Modulul de achizitie (Logging)
+        │   ├── GenerareDateCifre.vi
+        │   ├── GenerareDateLitere.vi
+        │   └── GenerareDateSimboluri.vi
+        ├── Antrenare/                # Modulul de training (RN)
+        │   ├── Antrenare neuroni ghicire numere.vi
+        │   ├── Antrenare neuroni ghicire litere.vi
+        │   ├── Antrenare neuroni ghicire simboluri.vi
+        │   └── SubVIs/               # Libraria Neural Network (API)
+        └── VI_Final/                 # Modulul de interfata (UI)
+            └── Antrenare neuroni ghicire cifre_litere_simboluri_grupuri de simboluri.vi
