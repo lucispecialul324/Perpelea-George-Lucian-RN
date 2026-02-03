@@ -3,82 +3,74 @@
 **Disciplina:** Retele Neuronale (RN)  
 **Institutie:** Universitatea POLITEHNICA Bucuresti – FIIR  
 **Student:** Perpelea George-Lucian  
-**Link Repository GitHub:**  https://github.com/lucispecialul324/Perpelea-George-Lucian-RN
-**Tag Versiune:** `v0.6-optimized-final`
+**Link Repository GitHub:** https://github.com/lucispecialul324/Perpelea-George-Lucian-RN  
+**Tag Versiune:** `v1.0-final-release`
+
 
 ## 1. Declaratia de Originalitate si Politica de Utilizare AI
 
 Prin prezenta, declar ca proiectul „Sistem SIA pentru Recunoasterea Caracterelor in LabVIEW” reprezinta munca mea originala.
-* **Contributie Date:** 100% din datele de antrenare (fisierele .bin) au fost generate manual prin modulele proprii de achizitie si etichetare.
-* **Utilizare AI:** Modelele de limbaj au fost utilizate exclusiv pentru asistenta in structurarea documentatiei si depanarea unor erori de logica. Conceptul tehnic, configurarea retelei si implementarea tuturor VI-urilor in LabVIEW au fost realizate integral de catre studentul Perpelea George-Lucian.
+* **Contributie Date:** 100% din datele de antrenare au fost generate manual.
+* **Depanare Tehnica:** Am utilizat asistenta AI pentru documentarea erorii de sistem `-67003` si pentru structurarea rapoartelor. 
+* **Implementare:** Conceptul tehnic, arhitectura retelei si configurarea serverului web in LabVIEW au fost realizate integral de catre student.
 
 ## 2. Descrierea Proiectului si Obiective
 
-Proiectul implementeaza un Sistem cu Inteligenta Artificiala (SIA) dezvoltat in LabVIEW pentru recunoasterea a 4 caractere (cifre, litere si simboluri) introduse simultan pe o matrice booleana de **9 linii si 28 de coloane**.
+Proiectul implementeaza un Sistem cu Inteligenta Artificiala (SIA) in LabVIEW pentru recunoasterea simultana a 4 caractere pe o matrice de **9x28**.
 
-**Module Functionale Obligatorii:**
-1.  **Data Logging (Achizitie):** Module pentru desenarea, segmentarea si salvarea datelor originale.
-2.  **Modul RN:** Retea neuronala Feed-Forward cu strat ascuns (Hidden Layer) pentru procesarea vectorilor 1D.
-3.  **UI (Interfata):** Aplicatie integrata care ofera predictie in timp real si feedback vizual despre increderea modelului.
-
+**Module Functionale:**
+1. **Data Logging:** Achizitie si etichetare manuala a datelor originale.
+2. **Modul RN:** Retea Feed-Forward optimizata cu 30 de neuroni in stratul ascuns.
+3. **Web Service (IoT):** API local pentru monitorizarea predictiilor de pe orice dispozitiv din retea.
+4. **UI (Interfata):** Dashboard interactiv cu feedback vizual si praguri de incredere ajustabile.
 
 ## 3. Analiza si Pregatirea Setului de Date (Etapa 3)
 
-* **Origine:** 100% date originale generate programatic prin interactiune manuala.
-* **Format:** Datele sunt stocate in format binar (`.bin`), continand vectori de invatare (Teaching Vectors).
-* **Segmentare:** Grila de 9x28 este impartita in 4 zone de 9x7 pixeli, rezultand 63 de caracteristici (features) per neuron.
-* **Fisiere:** `DateCifre.bin`, `DateLitere.bin`, `DateSimboluri.bin`.
+* **Segmentare:** Matricea 9x28 este impartita in 4 cadrane de 9x7 pixeli.
+* **Preprocesare:** Transformarea sub-matricilor in vectori 1D (63 caracteristici).
+* **Fisiere:** `DateCifre.bin`, `DateLitere.bin`, `DateSimboluri.bin` (format binar propriu).
+
+## 4. Arhitectura SIA si Logica de Control
+
+### 4.1 State Machine (Flow Aplicatie)
+Aplicatia ruleaza intr-o masina de stari: **IDLE** (asteptare) -> **PROCESS** (segmentare) -> **INFERENCE** (calcul RN) -> **WEB UPDATE** (trimitere date catre API) -> **DISPLAY**.
+
+### 4.2 Conceptul de „Pixel Critic”
+Pentru a rezolva confuziile intre caractere similare (ex: '8' vs 'B' sau '0'), am implementat analiza **pixelilor critici**:
+* Se monitorizeaza ponderile (weights) zonelor centrale ale matricii.
+* Daca un „pixel critic” central nu este activat, reteaua penalizeaza scorul pentru caracterele inchise (ca '8') in favoarea celor deschise.
 
 
-## 4. Arhitectura SIA si State Machine (Etapa 4)
 
-Aplicatia utilizeaza un design pattern de tip **State Machine** pentru a asigura un flux de date coerent si robust:
-1.  **IDLE:** Starea de asteptare pentru input-ul utilizatorului pe Front Panel.
-2.  **PROCESS:** Segmentarea matricii si transformarea datelor din 2D (9x7) in vectori 1D.
-3.  **INFERENCE:** Utilizarea functiei `Calculate Response.vi` pentru a genera predictiile pe baza modelului.
-4.  **DISPLAY:** Afisarea rezultatelor si a gradului de incredere in UI.
+## 5. Antrenare, Optimizare si Web Service
 
+### 5.1 Experimente de Optimizare
+| Exp# | Configuratie | Accuracy | F1-Score | Observatii |
+|:---:|:---:|:---:|:---:|:---:|
+| 1 | 10 Neuroni | 68% | 0.62 | Capacitate de generalizare scazuta. |
+| **3** | **30 Neuroni** | **82%** | **0.78** | **Configuratie OPTIMA - Stabilitate maxima.** |
 
-## 5. Antrenare, Optimizare si Experimente (Etapa 5 & 6)
+### 5.2 Integrare Web Service (Etapa 6)
+Am adaugat un layer de comunicatie prin **NI Web Server** pentru a expune rezultatele predictiei prin protocol HTTP.
+* **Provocare:** Eroarea `-67003` (SSE2 optimization error) la pornirea serverului.
+* **Solutie:** Dezactivarea optiunii **Enable SSE2 optimization** in proprietatile avansate ale Web Service-ului.
+* **Functionalitate:** Permite citirea variabilelor globale ale proiectului dintr-un browser web extern.
 
-S-au realizat **4 experimente de optimizare** pentru a identifica arhitectura ideala a retelei neuronale:
+## 6. Rezultate Finale si Analiza Performantei
 
-| Exp#  | Configuratie (Neuroni Hidden / LR) | Accuracy | F1-Score | Observatii                                            |
-| :----:| :---------------------------------:| :-------:| :-------:| :----------------------------------------------------:|
-| 1     | 10 Neuroni / LR 0.1                | 68%      | 0.62     | Rezultate sub pragul minim cerut.                     |
-| 2     | 20 Neuroni / LR 0.1                | 74%      | 0.69     | Crestere vizibila a preciziei.                        |
-| **3** | **30 Neuroni / LR 0.1**            | **82%**  | **0.78** | **Configuratie OPTIMA - Depaseste pragurile impuse.** |
-| 4     | 30 Neuroni / LR 0.05               | 80%      | 0.77     | Stabilitate mare, dar necesita mai multe iteratii.    |
+* **Viteza de raspuns:** < 50ms (Inferenta instantanee).
+* **Acuratete:** 82% (Peste pragul de 70% impus).
+* **Puncte Forte:** Recunoastere excelenta a literelor cu linii drepte si a cifrelor clare.
+* **Puncte Slabe:** Sensibilitate la centrarea desenului in interiorul cadranului de 9x7.
 
-**Justificare:** S-a ales varianta cu **30 de neuroni** deoarece a oferit cel mai bun echilibru intre acuratete si capacitatea de a distinge literele complexe la rezolutie mica.
+## 7. Instructiuni de Rulare
 
-## 6. Rezultate Finale si Analiza Performantei (Results)
+1. **Pornire Server:** Deschideti *NI Web Server Configuration* si asigurati-va ca statusul este „Running”.
+2. **Start Proiect:** In LabVIEW Project Explorer, dati click dreapta pe `MyWebService` -> **Start**.
+3. **Aplicatie:** Rulati `VI_Final/Antrenare neuroni ghicire cifre_litere_simboluri_grupuri de simboluri.vi`.
+4. **Monitorizare:** Dati click dreapta pe VI-ul din Web Resources -> **Show Method URL** pentru a vedea rezultatele in browser.
 
-### 6.1 Performanta Sistemului
-Sistemul a demonstrat o viteza de raspuns instantanee (< 50ms) si o stabilitate ridicata. Procesul de invatare a fost monitorizat prin graficul de eroare, care a convergent sub pragul de 0.1.
-
-### 6.2 Acuratete si Limitari
-* **Accuracy Finala:** 82% (Cerinta: ≥ 70%)
-* **F1-Score Final:** 0.78 (Cerinta: ≥ 0.65)
-* **Limitari:** Confuzia intre cifra '8' si litera 'B' din cauza densitatii similare de pixeli pe grila 9x7.
-
-### 6.3 Optimizarea Parametrilor
-Cea mai buna configuratie a fost stabilita la 30 de neuroni in stratul ascuns. S-a implementat un prag de incredere de 0.7 pentru a filtra rezultatele cu probabilitate scazuta.
-
-### 6.4 Lectii Invatate
-Am inteles ca succesul unui model RN in LabVIEW depinde critic de consistenta datelor de antrenare si de maparea corecta a intrarilor (Preprocesare).
-
-
-## 7. Instructiuni de Rulare (Demonstratie End-to-End)
-
-1.  Deschideti proiectul in **LabVIEW**.
-2.  Verificati instalarea toolkit-ului **NI Super Simple Neural Networks**.
-3.  Rulati aplicatia principala: `src/app/VI_Final/Antrenare neuroni ghicire cifre_litere_simboluri_grupuri de simboluri.vi`.
-4.  Desenati pe grila booleana si verificati predictia.
-5.  O demonstratie video este disponibila in folderul `docs/demo/`.
-
-
-## 8. Structura Finala Repository (Tag: v0.6-optimized-final)
+## 8. Structura Repository (Tag: v1.0-final-release)
 
 Perpelea-George-Lucian-RN/
 ├── README.md                         # Fisierul principal de prezentare
