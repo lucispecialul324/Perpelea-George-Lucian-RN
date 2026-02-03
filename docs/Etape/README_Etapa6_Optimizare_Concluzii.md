@@ -17,20 +17,24 @@ In aceasta etapa finala, aplicatia a fost rafinata prin testarea interactiva a p
 | **Prag Decizie**   | 0.5 (Standard)     | Ajustat la 0.7              | Eliminarea predictiilor nesigure cand desenul este ambiguu.    |
 | **Interfata (UI)** | Afisare simpla     | Adaugat indicatori vizuali  | Permite monitorizarea gradului de incredere al retelei.        |
 | **Testare Date**   | Testare pe set fix | Testare manuala interactiva | Verificarea robustetii sistemului la variatii de scris manual. |
-
+| **WebService**     | Inexistent         | Integrare **NI WEB SERVER   | Expunerea variabilelor globale pentru monitorizare externa.    | 
 
 ## 2. Optimizarea Parametrilor si Experimentare
 
-Optimizarea a fost realizata prin modificarea numarului de neuroni si a ratei de invatare direct in VI-urile de antrenare, urmarind scaderea erorii pe graficul din LabVIEW.
+### 2.1 Tehnica "Pixelului Critic"
+Pentru a imbunatati precizia, am identificat manual "pixelii critici" – zone din grila 9x7 care au o pondere determinanta in stratul ascuns al retelei.
+* **Exemplu:** Pentru a distinge cifrele '8' si '0', pixelii din centrul grilei devin critici. Daca acesti pixeli nu sunt activi, reteaua reevalueaza predictia catre '0', chiar daca forma exterioara este similara.
 
-### Tabel Experimente de Optimizare (Ajustari manuale)
+### 2.2  Tabel Experimente de Optimizare (Ajustari manuale)
 
-| Exp# | Modificare Parametri      | Rezultat Observat        | Observatii                                             |
-|------|---------------------------|--------------------------|--------------------------------------------------------|
-| 1    | 10 Hidden Neurons, LR=0.1 | Eroare medie ridicata    | Reteaua nu are suficienta "memorie" pentru detalii.    |
-| 2    | **30 Hidden Neurons**     | **Eroare scazuta rapid** | **Cea mai buna configuratie pentru grila 9x28.**       |
-| 3    | Learning Rate 0.05        | Convergenta lina         | Stabilitate mai mare, dar necesita mai multe iteratii. |
-| 4    | Creștere iterații (Teach) | Eroare finala minima     | S-a obtinut o potrivire mai buna a sabloanelor.        |
+| Exp# | Modificare Parametri      | Rezultat Observat        | Observatii                                                   |
+|------|---------------------------|--------------------------|--------------------------------------------------------------|
+| 1    | 10 Hidden Neurons, LR=0.1 | Eroare medie ridicata    | Reteaua nu are suficienta "memorie" pentru detalii.          | 
+| 2    | **30 Hidden Neurons**     | **Eroare scazuta rapid** | **Cea mai buna configuratie pentru grila 9x28.**             |
+| 3    | Learning Rate 0.05        | Convergenta lina         | Stabilitate mai mare, dar necesita mai multe iteratii.       |
+| 4    | Creștere iterații (Teach) | Eroare finala minima     | S-a obtinut o potrivire mai buna a sabloanelor.              |
+| 5    | Web API Debugging         | Erore -67003 (SSE2)      | Rezolvata prin dezactivarea optimizarii SSE2 in proprietati. |
+
 
 **Justificare:**
 S-a ales configuratia cu 30 de neuroni in stratul ascuns deoarece aceasta a permis distingerea literelor complexe fara a incetini procesarea in timp real a celor 4 sub-matrice.
@@ -54,6 +58,12 @@ Analiza performantei a fost realizata prin desenarea repetata a caracterelor in 
 | 3  | Litera 'B'       | Cifra '8'         | Similitudine structurala mare la rezolutie mica.     |
 | 4  | Litera 'A'       | Litera 'H'        | Varful literei nu a fost unit corect.                |
 | 5  | Cifra '5'        | Litera 'S'        | Unghiurile rotunjite au fost interpretate ca litera. |
+
+### 3.3 Implementarea Web Service
+O directie cheie in aceasta etapa a fost expunerea rezultatelor prin **LabVIEW Web Services**:
+* **Problema:** La pornirea serverului de debug, a aparut eroarea `-67003` (SSE2 optimization failure).
+* **Solutie:** Navigarea in *Web Service Properties -> Advanced* si bifarea optiunii **Disable SSE2 optimization**.
+* **Rezultat:** Datele din variabilele globale sunt acum accesibile printr-un URL dedicat, permitand monitorizarea sistemului dintr-un browser web.
 
 
 ## 4. Concluzii Finale si Lectii Invatate
@@ -79,7 +89,7 @@ Sistemul SIA implementat in LabVIEW reuseste sa prezica setul de 4 caractere cu 
 
 Perpelea-George-Lucian-RN/
 ├── README.md                         # Fisierul principal de prezentare
-├── config/                           # Parametrii retelei (iterații, LR, praguri)
+├── config/                           # Parametrii retelei (iteratii, LR, praguri)
 ├── data/                             # Seturile de date originale (.bin)
 │   ├── DateCifre.bin             
 │   ├── DateLitere.bin            
@@ -108,3 +118,4 @@ Perpelea-George-Lucian-RN/
         │   └── SubVIs/               # Libraria Neural Network (API)
         └── VI_Final/                 # Modulul de interfata (UI)
             └── Antrenare neuroni ghicire cifre_litere_simboluri_grupuri de simboluri.vi
+
